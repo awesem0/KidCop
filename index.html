@@ -275,8 +275,10 @@
     }
     .video-tutorial iframe {
       max-width: 100%;
-      width: 720px;
-      height: 405px;
+      width: 100%;
+      height: auto;
+      max-width: 820px;
+      aspect-ratio: 16 / 9;
     }
     @media (max-width: 740px) {
       .main-container {
@@ -486,7 +488,7 @@
       </div>
     </div>
     <div class="video-tutorial">
-      <iframe width="720" height="405" src="https://www.youtube.com/embed/b7WkxZ5OcBo?si=LVpCfX2eicbGeDqE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <iframe width="720" height="405" src="https://www.youtube.com/embed/_bWvnVN8IcQ?si=xrp5wWHTJ4sjtWQz&vq=hd1080" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
   </div>
   <script>
@@ -717,7 +719,7 @@
           pinchStartDist = dist(touchX1, touchY1, touchX2, touchY2);
           pinchStartScale = scaleVal1;
         } else if (activePhoto === 'photo2' && isTouchWithinPinchArea(touchX1, touchY1, xPos2, yPos2, scaleVal2) && isTouchWithinPinchArea(touchX2, touchY2, xPos2, yPos2, scaleVal2)) {
-          pinchStartDist = dist(touchX1, touchY1, xPos2, yPos2);
+          pinchStartDist = dist(touchX1, touchY1, touchX2, touchY2);
           pinchStartScale = scaleVal2;
         }
       }
@@ -917,9 +919,11 @@
       const selectPhoto1Button = document.getElementById('selectPhoto1');
       const selectPhoto2Button = document.getElementById('selectPhoto2');
       const downloadButton = document.getElementById('download');
+
       window.addEventListener('resize', () => {
         updateCanvasSize();
       });
+
       templateUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -956,6 +960,7 @@
           templateUpload.value = '';
         });
       });
+
       photoUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
