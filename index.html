@@ -267,6 +267,17 @@
       margin-bottom: 10px;
       max-width: 802.9px;
     }
+    .video-tutorial {
+      margin: 20px 0;
+      text-align: center;
+      max-width: 802.9px;
+      width: 100%;
+    }
+    .video-tutorial iframe {
+      max-width: 100%;
+      width: 720px;
+      height: 405px;
+    }
     @media (max-width: 740px) {
       .main-container {
         align-items: center;
@@ -388,6 +399,12 @@
       .disclaimer {
         font-size: 12px;
       }
+      .video-tutorial iframe {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        aspect-ratio: 16 / 9;
+      }
     }
   </style>
 </head>
@@ -468,6 +485,9 @@
         </div>
       </div>
     </div>
+    <div class="video-tutorial">
+      <iframe width="720" height="405" src="https://www.youtube.com/embed/b7WkxZ5OcBo?si=LVpCfX2eicbGeDqE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
   </div>
   <script>
     let templateImg, photoImg1, photoImg2, backgroundImg;
@@ -490,7 +510,6 @@
     let canvas;
     let canvasContainer;
     let templateScale = 1;
-
     let textX = 217.92;
     let text5X = 206.58;
     let text1Y = (126.16 - 10) - 1.89;
@@ -502,7 +521,6 @@
     const baseMaxTextWidth = 228.4;
     const baseText5MaxTextWidth = 245.36;
     const baseText5FontSize = 64.7;
-
     function preload() {
       loadImage(
         'https://i.imgur.com/YmWTOIp.png',
@@ -520,7 +538,6 @@
         }
       );
     }
-
     function setup() {
       canvas = createCanvas(canvasWidth, canvasHeight);
       canvas.parent('canvas-container');
@@ -531,22 +548,17 @@
       textFont('Special Elite');
       updateCanvasSize();
       updatePhotoButtonHighlight();
-
       canvas.canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
       canvas.canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
       canvas.canvas.addEventListener('touchend', handleTouchEnd);
     }
-
     function updateCanvasSize() {
       const container = document.getElementById('canvas-container');
       const containerWidth = container.offsetWidth;
       const containerHeight = container.offsetHeight;
-
       canvasWidth = containerWidth;
       canvasHeight = containerHeight;
-
       resizeCanvas(canvasWidth, canvasHeight);
-
       if (photoLoaded) {
         document.querySelector('#photo-controls').classList.remove('hidden');
       }
@@ -556,7 +568,6 @@
       updateSliderRanges();
       updateTextPositions();
     }
-
     function updateSliderRanges() {
       const xMax = canvasWidth / 2;
       const yMax = canvasHeight / 2;
@@ -566,13 +577,11 @@
       document.getElementById('yPos').setAttribute('max', yMax);
       updateSliders();
     }
-
     function updateTextPositions() {
       const baseWidth = isPortrait ? 425.7 : 540.1;
       const baseHeight = isPortrait ? 675.4 : 338.8;
       const widthRatio = canvasWidth / baseWidth;
       const heightRatio = canvasHeight / baseHeight;
-
       textX = 217.92 * widthRatio;
       text5X = 206.58 * widthRatio;
       text1Y = ((126.16 - 10) - 1.89) * heightRatio;
@@ -581,23 +590,19 @@
       text4Y = ((244.84 - 10) - 1.89) * heightRatio;
       text5Y = ((288.18 - 10) - 1.89) * heightRatio;
     }
-
     function adjustFontSizeForText(text, initialFontSize, maxWidth, isText5) {
       const isMobile = window.innerWidth <= 740;
       const baseWidth = isPortrait ? 425.7 : 540.1;
       const widthRatio = canvasWidth / baseWidth;
       let fontSize = initialFontSize * widthRatio;
-
       if (isMobile && !isText5) {
         fontSize = initialFontSize * widthRatio;
       } else if (isMobile && isText5) {
         fontSize = initialFontSize * widthRatio * 1.5;
       }
-
       textFont(isText5 ? 'Great Vibes' : 'Special Elite');
       textSize(fontSize);
       let textWidthVal = textWidth(text);
-
       if (text.length > 10) {
         while (textWidthVal > maxWidth * widthRatio && fontSize > 8) {
           fontSize -= 1;
@@ -605,7 +610,6 @@
           textWidthVal = textWidth(text);
         }
       }
-
       if (!isText5) {
         if (isMobile) {
           fontSize = Math.min(fontSize, 60 * widthRatio);
@@ -613,10 +617,8 @@
           fontSize = Math.min(fontSize, 25 * widthRatio);
         }
       }
-
       return fontSize;
     }
-
     function isMouseOverPhoto(photoImg, xPos, yPos, scaleVal, aspectRatio) {
       if (!photoImg) return false;
       let scaledHeight = photoImg.height * scaleVal;
@@ -625,12 +627,10 @@
       let photoY = yPos + canvasHeight / 2 - scaledHeight / 2;
       return mouseX >= photoX && mouseX <= photoX + scaledWidth && mouseY >= photoY && mouseY <= photoY + scaledHeight;
     }
-
     function isTouchWithinCanvas(touchX, touchY) {
       const canvasRect = canvas.canvas.getBoundingClientRect();
       return touchX >= canvasRect.left && touchX <= canvasRect.right && touchY >= canvasRect.top && touchY <= canvasRect.bottom;
     }
-
     function isTouchWithinPhoto(touchX, touchY, xPos, yPos, scaleVal) {
       if (!photoLoaded || (!photoImg1 && activePhoto === 'photo1') || (!photoImg2 && activePhoto === 'photo2')) return false;
       const canvasRect = canvas.canvas.getBoundingClientRect();
@@ -644,7 +644,6 @@
       let photoBottom = photoY + scaledHeight;
       return touchRelativeX >= photoX && touchRelativeX <= photoRight && touchRelativeY >= photoY && touchRelativeY <= photoBottom;
     }
-
     function isTouchWithinPinchArea(touchX, touchY, xPos, yPos, scaleVal) {
       if (!photoLoaded || (!photoImg1 && activePhoto === 'photo1') || (!photoImg2 && activePhoto === 'photo2')) return false;
       const canvasRect = canvas.canvas.getBoundingClientRect();
@@ -656,7 +655,6 @@
       let photoBottom = photoY + pinchHeight;
       return touchRelativeX >= 0 && touchRelativeX <= canvasWidth && touchRelativeY >= photoY && touchRelativeY <= photoBottom;
     }
-
     function mousePressed() {
       if (photoLoaded && activePhoto === 'photo2' && isMouseOverPhoto(photoImg2, xPos2, yPos2, scaleVal2, photoAspectRatio)) {
         isDraggingPhoto = true;
@@ -670,11 +668,9 @@
         updateSliders();
       }
     }
-
     function mouseReleased() {
       isDraggingPhoto = false;
     }
-
     function mouseDragged() {
       if (isDraggingPhoto) {
         if (activePhoto === 'photo1') {
@@ -690,7 +686,6 @@
         }
       }
     }
-
     function handleTouchStart(event) {
       event.preventDefault();
       const touches = event.touches;
@@ -727,7 +722,6 @@
         }
       }
     }
-
     function handleTouchMove(event) {
       event.preventDefault();
       const touches = event.touches;
@@ -763,16 +757,13 @@
         }
       }
     }
-
     function handleTouchEnd(event) {
       isDraggingPhoto = false;
       pinchStartDist = 0;
     }
-
     function dist(x1, y1, x2, y2) {
       return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
     }
-
     function updateSliders() {
       if (activePhoto === 'photo1') {
         document.getElementById('xPos').value = xPos1;
@@ -787,7 +778,6 @@
       }
       updatePhotoButtonHighlight();
     }
-
     function updatePhotoButtonHighlight() {
       const photo1Button = document.getElementById('selectPhoto1');
       const photo2Button = document.getElementById('selectPhoto2');
@@ -799,7 +789,6 @@
         photo1Button.classList.remove('active');
       }
     }
-
     function drawMainText() {
       fill(0);
       textAlign(LEFT, TOP);
@@ -825,7 +814,6 @@
         text(field4, textX, text4Y);
       }
     }
-
     function drawText5() {
       fill(0);
       textAlign(LEFT, TOP);
@@ -836,16 +824,13 @@
         text(field1, text5X, text5Y);
       }
     }
-
     function draw() {
       clear();
       background(255);
-
       if (backgroundLoaded && backgroundImg && !templateLoaded) {
         let imgAspect = backgroundImg.width / backgroundImg.height;
         let canvasAspect = canvasWidth / canvasHeight;
         let drawWidth, drawHeight;
-
         if (imgAspect > canvasAspect) {
           drawHeight = canvasHeight;
           drawWidth = drawHeight * imgAspect;
@@ -853,7 +838,6 @@
           drawWidth = canvasWidth;
           drawHeight = drawWidth / imgAspect;
         }
-
         fill(200, 200, 200);
         noStroke();
         rect(0, 0, canvasWidth, canvasHeight);
@@ -863,7 +847,6 @@
         noStroke();
         rect(0, 0, canvasWidth, canvasHeight);
       }
-
       if (templateLoaded && templateImg) {
         fill(255);
         noStroke();
@@ -906,13 +889,11 @@
           pop();
         }
       }
-
       if (templateLoaded && (field1 || field2 || field3 || field4)) {
         drawMainText();
         drawText5();
       }
     }
-
     function validateFile(file, type) {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
       const maxSizeMB = 10;
@@ -920,7 +901,6 @@
       if (file.size > maxSizeMB * 1024 * 1024) return `The ${type.toLowerCase()} file exceeds the ${maxSizeMB}MB size limit.`;
       return null;
     }
-
     document.addEventListener('DOMContentLoaded', () => {
       const templateUpload = document.getElementById('templateUpload');
       const photoUpload = document.getElementById('photoUpload');
@@ -937,11 +917,9 @@
       const selectPhoto1Button = document.getElementById('selectPhoto1');
       const selectPhoto2Button = document.getElementById('selectPhoto2');
       const downloadButton = document.getElementById('download');
-
       window.addEventListener('resize', () => {
         updateCanvasSize();
       });
-
       templateUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -978,7 +956,6 @@
           templateUpload.value = '';
         });
       });
-
       photoUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -1029,7 +1006,6 @@
           photoUpload.value = '';
         });
       });
-
       field1Input.addEventListener('input', (e) => field1 = e.target.value);
       field2Input.addEventListener('input', (e) => field2 = e.target.value);
       field3Input.addEventListener('input', (e) => field3 = e.target.value);
@@ -1082,7 +1058,6 @@
         activePhoto = 'photo2';
         updateSliders();
       });
-
       downloadButton.addEventListener('click', () => {
         if (!templateLoaded || !templateImg) {
           alert('Please upload a template.');
@@ -1095,7 +1070,6 @@
         try {
           highResCanvas = createGraphics(highResWidth, highResHeight);
           highResCanvas.background(255);
-
           if (backgroundLoaded && backgroundImg && !templateLoaded) {
             let imgAspect = backgroundImg.width / backgroundImg.height;
             let canvasAspect = highResWidth / highResHeight;
@@ -1116,13 +1090,11 @@
             highResCanvas.noStroke();
             highResCanvas.rect(0, 0, highResWidth, highResHeight);
           }
-
           if (templateLoaded) {
             highResCanvas.fill(255);
             highResCanvas.noStroke();
             highResCanvas.rect(0, 0, highResWidth, highResHeight);
           }
-
           if (photoLoaded && photoImg1 && !photoInFront1) {
             highResCanvas.push();
             highResCanvas.translate((xPos1 + canvasWidth / 2) * (highResWidth / canvasWidth), (yPos1 + canvasHeight / 2) * (highResHeight / canvasHeight));
@@ -1141,9 +1113,7 @@
             highResCanvas.image(photoImg2, 0, 0, photoImg2.width, photoImg2.height);
             highResCanvas.pop();
           }
-
           highResCanvas.image(templateImg, 0, 0, highResWidth, highResHeight);
-
           if (photoLoaded && photoImg1 && photoInFront1) {
             highResCanvas.push();
             highResCanvas.translate((xPos1 + canvasWidth / 2) * (highResWidth / canvasWidth), (yPos1 + canvasHeight / 2) * (highResHeight / canvasHeight));
@@ -1162,7 +1132,6 @@
             highResCanvas.image(photoImg2, 0, 0, photoImg2.width, photoImg2.height);
             highResCanvas.pop();
           }
-
           highResCanvas.fill(0);
           highResCanvas.textAlign(LEFT, TOP);
           highResCanvas.textFont('Special Elite');
@@ -1193,7 +1162,6 @@
             highResCanvas.textSize(adjustedFontSize * textScale);
             highResCanvas.text(field1, text5X * textScale, text5Y * textScale);
           }
-
           highResCanvas.canvas.toBlob((blob) => {
             if (!blob) {
               console.error('Failed to create blob for download');
